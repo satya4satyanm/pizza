@@ -3,7 +3,7 @@ const app = express()
 const mongoose = require('mongoose');
 const graphqlExpress = require("express-graphql");
 const bookSchema = require('./graphql/BookSchema').BookSchema;
-mongoose.connect('mongodb://mongo:27017/pizza', { useNewUrlParser: true, useNewUrlParser: true }, (err) => {
+mongoose.connect('mongodb://mongo:27017/pizza', { useNewUrlParser: true, useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) throw err;
     console.log("connected to mongo");
 })

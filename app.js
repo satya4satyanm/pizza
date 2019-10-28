@@ -8,7 +8,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 
-mongoose.connect("mongodb://mongo:27017/pizza", { useNewUrlParser: true, useNewUrlParser: true }, function(err){
+mongoose.connect("mongodb://mongo:27017/pizza", { useNewUrlParser: true, useNewUrlParser: true, useUnifiedTopology: true }, function(err){
   if(err) {
     console.log(err);
   } else {
