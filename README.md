@@ -76,6 +76,10 @@ docker stack deploy for swarm deployment
 
 docker run satya4satyanm/pizza
 
+docker rm container if needed
+docker run -d -p 27017:27017 --name mongodb mongo      start mongo container
+docker exec -it mongodb bash    this is for interactive mode
+
 
 to see the files inside docker image 
 docker run --rm -it --entrypoint=/bin/bash satya4satyanm/pizza
