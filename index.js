@@ -3,14 +3,16 @@ const app = express()
 const mongoose = require('mongoose');
 const graphqlExpress = require("express-graphql");
 const bookSchema = require('./graphql/BookSchema').BookSchema;
-mongoose.connect('mongodb://mongo:27017/pizza', { useNewUrlParser: true }, (err) => {
+mongoose.connect('mongodb://localhost:27017/pizza', { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if(err) {
         throw err;
         console.log(err);
     } else {
         console.log('connected to mongo db successfully.')
     }
-})
+}).then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
 
 app.set('port', (process.env.PORT || 4000));
 app.listen(app.get('port'),  () =>{

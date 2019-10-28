@@ -67,6 +67,13 @@ reference url
 https://medium.com/@mohamedaymen.ourabi11/creating-a-simple-crud-app-with-nodejs-graphql-and-mongodb-docker-eeb22d44925b
 
 
+mongodb with authentication
+
+https://medium.com/@anuradhs/connect-to-mongodb-docker-container-with-authentication-using-mongoose-and-nodejs-6319bea82e9d
+
+
+
+
 Run the app
 ================================
 docker-compose build
