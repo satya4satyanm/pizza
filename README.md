@@ -63,6 +63,7 @@ Deadline: 31st Oct, 2019
 
 
 reference url
+================================
 https://medium.com/@mohamedaymen.ourabi11/creating-a-simple-crud-app-with-nodejs-graphql-and-mongodb-docker-eeb22d44925b
 
 
@@ -73,8 +74,15 @@ docker-compose up
 
 docker stack deploy for swarm deployment
 
+docker run satya4satyanm/pizza
+
+
+to see the files inside docker image 
+docker run --rm -it --entrypoint=/bin/bash satya4satyanm/pizza
+
+
 
 flow diagram
-
+================================
 https://www.draw.io/#G1rhOyV74vWGmLTWiewzQo1C4C30vxzwgK
 

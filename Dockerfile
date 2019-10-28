@@ -17,13 +17,13 @@
 #define the latest nodejs image  to build from
 FROM node:latest
 #create a working directory
-WORKDIR /usr/src/app/graphqlApp
+WORKDIR /usr/src/app
 #copy package.json file under the working directory 
-COPY package.json /usr/src/app/graphqlApp/
+COPY package*.json ./
 # install all the dependencies 
 RUN npm install && npm audit fix
 #copy all your files under the working directory
-COPY . /usr/src/graphqlApp
+COPY . .
 #expose the port 4000
 EXPOSE 4000
 #start nodejs server 
