@@ -1,0 +1,12 @@
+[
+    {
+        "role": "admin",
+        "canFeedData": true,
+        "canOrder": false
+    },
+    {
+        "role": "user",
+        "canFeedData": false,
+        "canOrder": true
+    }
+]

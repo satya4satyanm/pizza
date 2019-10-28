@@ -1,0 +1,16 @@
+[
+    {
+        "name": "p1", 
+        "description": "pizza 1", 
+        "type":"veg", 
+        "toppings":["onion", "tomato", "capsicum"], 
+        "price": 4
+    },
+    {
+        "name": "p2", 
+        "description": "pizza 1", 
+        "type":"non-veg", 
+        "toppings":["onion", "tomato", "capsicum"], 
+        "price": 4
+    }
+]
