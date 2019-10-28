@@ -79,6 +79,11 @@ docker run satya4satyanm/pizza
 
 to see the files inside docker image 
 docker run --rm -it --entrypoint=/bin/bash satya4satyanm/pizza
+ls -lsa
+cd..
+
+
+docker exec -it container_name /bin/bash
 
 
 

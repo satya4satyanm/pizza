@@ -7,7 +7,7 @@ mongoose.connect('mongodb://mongo:27017/pizza', { useNewUrlParser: true, useNewU
     if (err) throw err;
     console.log("connected to mongo");
 })
-app.set('port', (process.env.PORT || 8000));
+app.set('port', (process.env.PORT || 4000));
 app.listen(app.get('port'),  () =>{
     console.log("Node app is running at localhost:" + app.get('port'))
 });
