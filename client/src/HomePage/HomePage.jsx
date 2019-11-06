@@ -1,41 +1,62 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { userService, authenticationService } from '@/_services';
+import { userActions } from '../_actions';
 
 class HomePage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            currentUser: authenticationService.currentUserValue,
-            userFromApi: null
-        };
+    componentDidMount() {
+        this.props.getUsers();
     }
 
-    componentDidMount() {
-        const { currentUser } = this.state;
-        userService.getById(currentUser.id).then(userFromApi => this.setState({ userFromApi }));
+    handleDeleteUser(id) {
+        return (e) => this.props.deleteUser(id);
     }
 
     render() {
-        const { currentUser, userFromApi } = this.state;
+        const { user, users } = this.props;
         return (
-            <div>
-                <h1>Home</h1>
-                <p>You're logged in with React & JWT!!</p>
-                <p>Your role is: <strong>{currentUser.role}</strong>.</p>
-                <p>This page can be accessed by all authenticated users.</p>
-                <div>
-                    Current user from secure api end point:
-                    {userFromApi &&
-                        <ul>
-                            <li>{userFromApi.firstName} {userFromApi.lastName}</li>
-                        </ul>
-                    }
-                </div>
+            <div className="col-md-6 col-md-offset-3">
+                <h1>Hi {user.firstName}!</h1>
+                <p>You're logged in with React!!</p>
+                <h3>All registered users:</h3>
+                {users.loading && <em>Loading users...</em>}
+                {users.error && <span className="text-danger">ERROR: {users.error}</span>}
+                {users.items &&
+                    <ul>
+                        {users.items.map((user, index) =>
+                            <li key={user.id}>
+                                {user.firstName + ' ' + user.lastName}
+                                {
+                                    user.deleting ? <em> - Deleting...</em>
+                                    : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
+                                    : <span> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
+                                }
+                            </li>
+                        )}
+                    </ul>
+                }
+                {user.role == "admin" &&
+                    <div>{user.role}</div>
+                }
+                <p>
+                    <Link to="/login">Logout</Link>
+                </p>
             </div>
         );
     }
 }
 
-export { HomePage };
+function mapState(state) {
+    const { users, authentication } = state;
+    const { user } = authentication;
+    return { user, users };
+}
+
+const actionCreators = {
+    getUsers: userActions.getAll,
+    deleteUser: userActions.delete
+}
+
+const connectedHomePage = connect(mapState, actionCreators)(HomePage);
+export { connectedHomePage as HomePage };

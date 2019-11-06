@@ -70,6 +70,8 @@ mongodb with authentication
 https://medium.com/@anuradhs/connect-to-mongodb-docker-container-with-authentication-using-mongoose-and-nodejs-6319bea82e9d
 
 
+https://jasonwatmore.com/archive
+
 
 Mistakes:
 ================================
@@ -132,3 +134,8 @@ enhancements:
 ==================================
 user regn
 https://jasonwatmore.com/post/2018/06/14/nodejs-mongodb-simple-api-for-authentication-registration-and-user-management
+
+
+
+graphql:
+I am connecting from same server file

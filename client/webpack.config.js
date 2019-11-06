@@ -1,5 +1,4 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
 
 module.exports = {
     mode: 'development',
@@ -14,12 +13,6 @@ module.exports = {
             }
         ]
     },
-    resolve: {
-        extensions: ['.js', '.jsx'],
-        alias: {
-            '@': path.resolve(__dirname, 'src/'),
-        }
-    },
     plugins: [new HtmlWebpackPlugin({
         template: './src/index.html'
     })],
@@ -29,7 +22,7 @@ module.exports = {
     externals: {
         // global app config object
         config: JSON.stringify({
-            apiUrl: 'http://localhost:4000'
+            apiUrl: 'http://localhost:4200'
         })
     }
 }

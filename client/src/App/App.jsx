@@ -1,64 +1,56 @@
 import React from 'react';
-import { Router, Route, Link } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { history, Role } from '@/_helpers';
-import { authenticationService } from '@/_services';
-import { PrivateRoute } from '@/_components';
-import { HomePage } from '@/HomePage';
-import { AdminPage } from '@/AdminPage';
-import { LoginPage } from '@/LoginPage';
+import { history } from '../_helpers';
+import { alertActions } from '../_actions';
+import { PrivateRoute } from '../_components';
+import { HomePage } from '../HomePage';
+import { LoginPage } from '../LoginPage';
+import { RegisterPage } from '../RegisterPage';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            currentUser: null,
-            isAdmin: false
-        };
-    }
-
-    componentDidMount() {
-        authenticationService.currentUser.subscribe(x => this.setState({
-            currentUser: x,
-            isAdmin: x && x.role === Role.Admin
-        }));
-    }
-
-    logout() {
-        authenticationService.logout();
-        history.push('/login');
+        history.listen((location, action) => {
+            // clear alert on location change
+            this.props.clearAlerts();
+        });
     }
 
     render() {
-        const { currentUser, isAdmin } = this.state;
+        const { alert } = this.props;
         return (
-            <Router history={history}>
-                <div>
-                    {currentUser &&
-                        <nav className="navbar navbar-expand navbar-dark bg-dark">
-                            <div className="navbar-nav">
-                                <Link to="/" className="nav-item nav-link">Home</Link>
-                                {isAdmin && <Link to="/admin" className="nav-item nav-link">Admin</Link>}
-                                <a onClick={this.logout} className="nav-item nav-link">Logout</a>
-                            </div>
-                        </nav>
-                    }
-                    <div className="jumbotron">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-6 offset-md-3">
-                                    <PrivateRoute exact path="/" component={HomePage} />
-                                    <PrivateRoute path="/admin" roles={[Role.Admin]} component={AdminPage} />
-                                    <Route path="/login" component={LoginPage} />
-                                </div>
-                            </div>
-                        </div>
+            <div className="jumbotron">
+                <div className="container">
+                    <div className="col-sm-8 col-sm-offset-2">
+                        {alert.message &&
+                            <div className={`alert ${alert.type}`}>{alert.message}</div>
+                        }
+                        <Router history={history}>
+                            <Switch>
+                                <PrivateRoute exact path="/" component={HomePage} />
+                                <Route path="/login" component={LoginPage} />
+                                <Route path="/register" component={RegisterPage} />
+                                <Redirect from="*" to="/" />
+                            </Switch>
+                        </Router>
                     </div>
                 </div>
-            </Router>
+            </div>
         );
     }
 }
 
-export { App }; 
+function mapState(state) {
+    const { alert } = state;
+    return { alert };
+}
+
+const actionCreators = {
+    clearAlerts: alertActions.clear
+};
+
+const connectedApp = connect(mapState, actionCreators)(App);
+export { connectedApp as App };
