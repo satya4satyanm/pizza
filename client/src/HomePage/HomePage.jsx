@@ -1,16 +1,53 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import config from 'config';
 
 import { userActions } from '../_actions';
 
 class HomePage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            pizzas: []
+        }
+    }
+
     componentDidMount() {
         this.props.getUsers();
+
+        let t = this;
+        fetch(`${config.apiUrl}/pizzas/getAllPizzas`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            }
+          })
+            .then(r => r.json())
+            .then(data => {
+                this.setState({
+                    pizzas : data
+                })
+                console.log('data returned:', data)
+            });
+
     }
 
     handleDeleteUser(id) {
         return (e) => this.props.deleteUser(id);
+    }
+
+
+        
+    getAllPizzas() {
+        return (<ul>
+           { 
+                this.state.pizzas.map(function(item, i){
+                    return <li>{item.description}</li>
+                })
+           }
+        </ul>)
     }
 
     render() {
@@ -37,7 +74,17 @@ class HomePage extends React.Component {
                     </ul>
                 }
                 {user.role == "admin" &&
-                    <div>{user.role}</div>
+                    <div>See orders</div>
+                }
+                {
+                    user.role == "user" && 
+                    <ul>
+                        {this.state.pizzas.map((pizza, index) =>
+                            <li key={pizza.name}>
+                                {pizza.description}
+                            </li>
+                        )}
+                    </ul>
                 }
                 <p>
                     <Link to="/login">Logout</Link>
@@ -52,6 +99,8 @@ function mapState(state) {
     const { user } = authentication;
     return { user, users };
 }
+
+
 
 const actionCreators = {
     getUsers: userActions.getAll,

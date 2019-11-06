@@ -15,6 +15,8 @@ app.use(jwt());
 
 // api routes
 app.use('/users', require('./users/users.controller'));
+app.use('/orders', require('./orders/orders.controller'));
+app.use('/pizzas', require('./pizzas/pizzas.controller'));
 
 // global error handler
 app.use(errorHandler);
@@ -31,8 +33,8 @@ const server = app.listen(port, function () {
 // GraphQL - Authenticating Client
 // https://www.tutorialspoint.com/graphql/graphql_quick_guide.htm
 //////////////////////////////
-const expressJwt = require('express-jwt'); //auth
-const jwt = require('jsonwebtoken'); //auth
+//const expressJwt = require('express-jwt'); //auth
+//const jwt = require('jsonwebtoken'); //auth
 //////////////////////////////
 
 
