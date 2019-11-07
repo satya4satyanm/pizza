@@ -13,8 +13,7 @@ function jwt() {
             '/users/register',
             //'/users/',
             '/graphiql',
-            '/graphql',
-            '/pizzas/getAllPizzas'
+            '/graphql'
         ]
     });
 }

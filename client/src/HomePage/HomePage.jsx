@@ -2,15 +2,27 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import config from 'config';
+import { authHeader } from '../_helpers';
 
 import { userActions } from '../_actions';
 
 class HomePage extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
+
+        const { user } = this.props;
+
         this.state = {
-            pizzas: []
+            pizzas: [],
+            orders: [],
+            orderObj: {
+            "username": user.username,
+            "address": { "street": "bnpura" },
+            "items": ['p1','p2'],
+            "delivered": false}
         }
+
+        this.placeOrder = this.placeOrder.bind(this);
     }
 
     componentDidMount() {
@@ -19,25 +31,49 @@ class HomePage extends React.Component {
         let t = this;
         fetch(`${config.apiUrl}/pizzas/getAllPizzas`, {
             method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            }
+            headers: authHeader()
           })
             .then(r => r.json())
             .then(data => {
                 this.setState({
                     pizzas : data
                 })
+            });
+
+
+        fetch(`${config.apiUrl}/orders/getOrders`, {
+            method: 'GET',
+            headers: authHeader()
+            })
+            .then(r => r.json())
+            .then(data => {
+                this.setState({
+                    orders : data
+                })
                 console.log('data returned:', data)
             });
 
+
+            
+
+            
     }
 
     handleDeleteUser(id) {
         return (e) => this.props.deleteUser(id);
     }
 
+    placeOrder() {
+        fetch(`${config.apiUrl}/orders/placeOrder`, {
+            method: 'POST',
+            headers: authHeader(),
+            body: JSON.stringify(this.state.orderObj)
+            })
+            .then(r => r.json())
+            .then(data => {
+                console.log('data returned:', data)
+            });
+    }
 
         
     getAllPizzas() {
@@ -54,12 +90,12 @@ class HomePage extends React.Component {
         const { user, users } = this.props;
         return (
             <div className="col-md-6 col-md-offset-3">
-                <h1>Hi {user.firstName}!</h1>
-                <p>You're logged in with React!!</p>
-                <h3>All registered users:</h3>
+                <h1>Hi {user.firstName}!</h1><Link to="/login">Logout</Link>
+                {/* <p>You're logged in with React!!</p> */}
+                {/* <h3>All registered users:</h3> */}
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-                {users.items &&
+                {/* {users.items &&
                     <ul>
                         {users.items.map((user, index) =>
                             <li key={user.id}>
@@ -72,22 +108,35 @@ class HomePage extends React.Component {
                             </li>
                         )}
                     </ul>
-                }
+                } */}
                 {user.role == "admin" &&
-                    <div>See orders</div>
+                    <div>
+                        <h2>Orders List</h2>
+                        <table border="2">
+                            {this.state.orders.map((order, index) =>
+                                <tr><td>
+                                    {order.createdDate}
+                                </td><td>
+                                    {order.orderId}
+                                </td></tr>
+                            )}
+                        </table>
+                    </div>
                 }
                 {
                     user.role == "user" && 
-                    <ul>
+                    <form><ul>
                         {this.state.pizzas.map((pizza, index) =>
                             <li key={pizza.name}>
-                                {pizza.description}
+                                {pizza.description} <input type="checkbox" value={pizza.name} />
                             </li>
                         )}
                     </ul>
+                    <input type="button" onClick={this.placeOrder} value="Place Order"></input>
+                    </form>
                 }
                 <p>
-                    <Link to="/login">Logout</Link>
+                    
                 </p>
             </div>
         );

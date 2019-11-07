@@ -8,6 +8,7 @@ module.exports = {
 
 
 async function placeOrder(orderParam) {
+    orderParam.orderId = Math.ceil(Math.random()*5000).toString();
     const order = new Order(orderParam);
     await order.save();
 }

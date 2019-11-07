@@ -3,5 +3,5 @@ type Query {
 }
 
 type Mutation {
-   createStudent(collegeId:ID,firstName:String,lastName:String):String
+   createPizza(name:String,description:String,type:String,toppings:[String],price:Int):String
 }

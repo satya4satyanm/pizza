@@ -5,6 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('_helpers/jwt');
 const errorHandler = require('_helpers/error-handler');
+const helmet = require('helmet');
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -12,6 +14,8 @@ app.use(cors());
 
 // use JWT auth to secure the api
 app.use(jwt());
+app.use(helmet());
+app.disable('x-powered-by');
 
 // api routes
 app.use('/users', require('./users/users.controller'));
@@ -51,3 +55,5 @@ const {graphqlExpress,graphiqlExpress} = require('apollo-server-express')
 
 app.use('/graphql',graphqlExpress({schema}))
 app.use('/graphiql',graphiqlExpress({endpointURL:'/graphql'}))
+
+// http://localhost:4200/graphql?{"query":"mutation {\n  createPizza(name:\"p4\",description:\"Pizza 4\",type:\"Veg\",toppings:[\"t\",\"p\"],price:5)\n}","variables":null}

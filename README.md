@@ -1,7 +1,7 @@
 
 Expectations:
-1. Ensure that APIs created have proper security headers (use helmet module)
-2. Secure the services using Authentication and Authorization. Authentication is done is using json web tokens
+1. Ensure that APIs created have proper security headers (use helmet module)   DONE
+2. Secure the services using Authentication and Authorization. Authentication is done is using json web tokens  DONE
 3. Use GraphQL for pizza search
 4. Use API gateway to handle authorization for all the services.
 5. Add docker file to crate docker images for microservices.

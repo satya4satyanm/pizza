@@ -1,13 +1,17 @@
-﻿const config = require('config.json');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const db = require('_helpers/db');
+﻿const db = require('_helpers/db');
 const Pizza = db.Pizza;
 
 module.exports = {
-    getAll
+    getAll,
+    createPizza
 };
 
 async function getAll() {
     return await Pizza.find({});
+}
+
+async function createPizza(args) {
+    const pizza = new Pizza(args);
+    // save pizza
+    await pizza.save();
 }
