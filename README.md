@@ -2,9 +2,9 @@
 Expectations:
 1. Ensure that APIs created have proper security headers (use helmet module)   DONE
 2. Secure the services using Authentication and Authorization. Authentication is done is using json web tokens  DONE
-3. Use GraphQL for pizza search
+3. Use GraphQL for pizza search   (I have used graphql for create pizza)  DONE
 4. Use API gateway to handle authorization for all the services.
-5. Add docker file to crate docker images for microservices.
+5. Add docker file to crate docker images for microservices.   DONE
 6. Health check/monitoring/tracing is implemented for microservices
 7. Create Kubernetes deployment and services manifest for deploying on Kubernetes cluster
 8. Setup CI-CD using gitlab (optional)
@@ -139,3 +139,11 @@ https://jasonwatmore.com/post/2018/06/14/nodejs-mongodb-simple-api-for-authentic
 
 graphql:
 I am connecting from same server file
+
+
+
+Implementation:
+
+1. currently orders, pizzas, and users are microervices and included in server.js
+    currently they share the same DB. It can be separated
+2. 
