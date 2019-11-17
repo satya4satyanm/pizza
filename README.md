@@ -3,7 +3,7 @@ Expectations:
 1. Ensure that APIs created have proper security headers (use helmet module)   DONE
 2. Secure the services using Authentication and Authorization. Authentication is done is using json web tokens  DONE
 3. Use GraphQL for pizza search   (I have used graphql for create pizza)  DONE
-4. Use API gateway to handle authorization for all the services.
+4. Use API gateway to handle authorization for all the services.  https://github.com/nanit/api-gateway-example 
 5. Add docker file to crate docker images for microservices.   DONE
 6. Health check/monitoring/tracing is implemented for microservices
 7. Create Kubernetes deployment and services manifest for deploying on Kubernetes cluster

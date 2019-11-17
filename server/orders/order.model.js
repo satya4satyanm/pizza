@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    orderId: { type: String },
+    orderId: { type: Number },
     username: { type: String, required: true },
     address: { type: Object },
     createdDate: { type: Date, default: Date.now },

@@ -11,18 +11,21 @@ class HomePage extends React.Component {
         super(props);
 
         const { user } = this.props;
-
+        this.selectedPizzas = [];
         this.state = {
             pizzas: [],
             orders: [],
             orderObj: {
             "username": user.username,
             "address": { "street": "bnpura" },
-            "items": ['p1','p2'],
+            "items": [],
             "delivered": false}
         }
 
         this.placeOrder = this.placeOrder.bind(this);
+        this.addToCart = this.addToCart.bind(this);
+        this.removeFromCart = this.removeFromCart.bind(this);
+        this.delivered = this.delivered.bind(this);
     }
 
     componentDidMount() {
@@ -52,88 +55,173 @@ class HomePage extends React.Component {
                 })
                 console.log('data returned:', data)
             });
-
-
-            
-
-            
     }
 
     handleDeleteUser(id) {
         return (e) => this.props.deleteUser(id);
     }
 
+    addToCart(e) {
+        this.selectedPizzas.push(JSON.parse(e.target.getAttribute("data-p")));
+        debugger;
+        this.updateState();
+    }
+
+    updateState() {
+        this.setState(prevState => {
+            let orderObj = Object.assign({}, prevState.orderObj); 
+            orderObj["items"] = this.selectedPizzas;                              
+            return { orderObj };                        
+            })
+    }
+
+    removeFromCart(e) {
+        this.selectedPizzas.splice(e.target.getAttribute("data-p"), 1);
+        this.updateState();
+
+    }
+
     placeOrder() {
+        debugger;
+
         fetch(`${config.apiUrl}/orders/placeOrder`, {
             method: 'POST',
             headers: authHeader(),
             body: JSON.stringify(this.state.orderObj)
             })
-            .then(r => r.json())
+            .then(
+                r => r.json()
+            )
             .then(data => {
                 console.log('data returned:', data)
+                this.selectedPizzas=[];
+                this.updateState();
             });
     }
 
-        
-    getAllPizzas() {
-        return (<ul>
-           { 
-                this.state.pizzas.map(function(item, i){
-                    return <li>{item.description}</li>
-                })
-           }
-        </ul>)
+
+    delivered(e) {
+        var val = e.target.getAttribute("data-value");
+        fetch(`${config.apiUrl}/orders/removeOrder`, {
+            method: 'POST',
+            headers: authHeader(),
+            body: JSON.stringify({orderId: val})
+            })
+            .then(
+                r => r.json()
+            )
+            .then(data => {
+                console.log('data returned:', data)
+                if(data.success == 1) {
+                    var items = this.state.orders;
+                    items.splice(items.findIndex(function(i){
+                        return i.orderId === val;
+                    }), 1);
+
+                    this.setState({
+                        orders: items
+                    })
+                }
+            });
     }
 
     render() {
         const { user, users } = this.props;
         return (
-            <div className="col-md-6 col-md-offset-3">
-                <h1>Hi {user.firstName}!</h1><Link to="/login">Logout</Link>
-                {/* <p>You're logged in with React!!</p> */}
-                {/* <h3>All registered users:</h3> */}
+            
+            <div>
+                
+                <div className="jumbotron" style={{"padding":"20px"}} >
+                    <h1 className="float-left">Pizza Hunt App</h1>
+                    <Link className="float-right" to="/login">Logout</Link>
+                    <p className="float-right" style={{"marginRight":"20px"}} >Hi {user.firstName}! </p>
+                    <div style={{"clear": "both"}}></div>
+                </div>
+                
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-                {/* {users.items &&
-                    <ul>
-                        {users.items.map((user, index) =>
-                            <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
-                                {
-                                    user.deleting ? <em> - Deleting...</em>
-                                    : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                    : <span> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
-                                }
-                            </li>
-                        )}
-                    </ul>
-                } */}
+               
                 {user.role == "admin" &&
-                    <div>
+                    <div className="container-fluid">
+                    <div className="row">
+                    <div className="col-sm">
                         <h2>Orders List</h2>
-                        <table border="2">
+                        <p>Check if delivered.</p>
+                        <table><tbody>
                             {this.state.orders.map((order, index) =>
-                                <tr><td>
+                                <tr key={order.orderId}><td>
                                     {order.createdDate}
                                 </td><td>
                                     {order.orderId}
-                                </td></tr>
+                                </td>
+                                <td>
+                                <input type="button" onClick={this.delivered} value="-" data-value={order.orderId} />
+                                </td>
+                                </tr>
                             )}
-                        </table>
+                        </tbody></table>
+                    </div>
+                    <div className="col-sm">
+                        <h2>Manage Pizzas</h2>
+                    </div>
+                    <div className="col-sm">
+                        <h2>Manage Stores</h2>
+                    </div>
+                    </div>
                     </div>
                 }
                 {
                     user.role == "user" && 
-                    <form><ul>
-                        {this.state.pizzas.map((pizza, index) =>
-                            <li key={pizza.name}>
-                                {pizza.description} <input type="checkbox" value={pizza.name} />
-                            </li>
-                        )}
-                    </ul>
-                    <input type="button" onClick={this.placeOrder} value="Place Order"></input>
-                    </form>
+                    <div className="container-fluid">
+                    <div className="row">
+                    <div className="col-sm">
+                            <h2>Pizza List</h2>
+                            <form><table><tbody>
+                                {this.state.pizzas.map((pizza, index) =>
+                                    <tr key={pizza.name}><td>
+                                        {pizza.description} 
+                                        </td>
+                                        <td>
+                                            <img src="p.jpg"/>
+                                        </td>
+                                        <td>
+                                        ${pizza.price} 
+                                        </td>
+                                        <td>
+                                        <input type="button" data-p={JSON.stringify(pizza)} onClick={this.addToCart} value="+"></input>
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody></table>
+                            {/* <input type="button" onClick={this.addToCart} value="Add to cart"></input> */}
+                            </form>
+                        </div>
+                        <div className="col-sm">
+                            <h2>Cart</h2>
+                            <div className="alert alert-success">{"success"}</div>
+                            <table><tbody>
+                                {this.selectedPizzas.map((pizza, index) =>
+                                    <tr key={index}><td>
+                                        {pizza.name} 
+                                        </td>
+                                        <td>
+                                        ${pizza.price} 
+                                        </td>
+                                        <td>
+                                        <input type="button" data-p={pizza} onClick={this.removeFromCart} value="-"></input>
+                                        </td>
+                                    </tr>
+                                )}
+                                <tr><td>Total</td><td>$
+                                {
+                                    this.selectedPizzas.reduce((a, b) => a + (b["price"] || 0), 0)
+                                }</td><td></td></tr>
+                            </tbody></table>
+                            <p> </p>
+                            <input type="button" onClick={this.placeOrder} value="Place Order"></input>
+                        </div>
+                    </div>
+                    </div>
                 }
                 <p>
                     
