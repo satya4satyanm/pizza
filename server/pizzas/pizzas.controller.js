@@ -9,6 +9,11 @@ module.exports = router;
 
 function getAll(req, res, next) {
     pizzaService.getAll()
-        .then(pizzas => res.json(pizzas))
+        .then(pizzas => {
+            if(typeof pizzas === "string")
+                pizzas = JSON.parse(pizzas);
+
+            res.json(pizzas)
+        })
         .catch(err => next(err));
 }
