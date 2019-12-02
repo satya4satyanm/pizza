@@ -25,6 +25,6 @@ RUN npm install && npm audit fix
 #copy all your files under the working directory
 COPY . .
 #expose the port 4000
-EXPOSE 4000
+EXPOSE 4201
 #start nodejs server 
 CMD npm start

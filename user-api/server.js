@@ -19,14 +19,12 @@ app.disable('x-powered-by');
 
 // api routes
 app.use('/users', require('./users/users.controller'));
-app.use('/orders', require('./orders/orders.controller'));
-app.use('/pizzas', require('./pizzas/pizzas.controller'));
 
 // global error handler
 app.use(errorHandler);
 
 // start server
-const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4200;
+const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4201;
 const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
 });
@@ -40,20 +38,3 @@ const server = app.listen(port, function () {
 //const expressJwt = require('express-jwt'); //auth
 //const jwt = require('jsonwebtoken'); //auth
 //////////////////////////////
-
-
-const db = require('./graphql/data/db');
-
-const fs = require('fs')
-const typeDefs = fs.readFileSync('./graphql/schema.graphql',{encoding:'utf-8'})
-const resolvers = require('./graphql/resolver')
-
-const {makeExecutableSchema} = require('graphql-tools')
-const schema = makeExecutableSchema({typeDefs, resolvers})
-
-const {graphqlExpress,graphiqlExpress} = require('apollo-server-express')
-
-app.use('/graphql',graphqlExpress({schema}))
-app.use('/graphiql',graphiqlExpress({endpointURL:'/graphql'}))
-
-// http://localhost:4200/graphql?{"query":"mutation {\n  createPizza(name:\"p4\",description:\"Pizza 4\",type:\"Veg\",toppings:[\"t\",\"p\"],price:5)\n}","variables":null}

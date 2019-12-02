@@ -162,9 +162,6 @@ class HomePage extends React.Component {
                         </tbody></table>
                     </div>
                     <div className="col-sm">
-                        <h2>Manage Pizzas</h2>
-                    </div>
-                    <div className="col-sm">
                         <h2>Manage Stores</h2>
                     </div>
                     </div>

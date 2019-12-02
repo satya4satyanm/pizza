@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    restart: always
+    build: .
+    ports:
+      - "4201:4201"
+    links: 
+      - redis
+      - mongo
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  mongo:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - "27017:27017"
+  admin-mongo:
+    image: mrvautin/adminmongo
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - CONN_NAME=mongo
+      - DB_HOST=mongo
+    links:
+      - mongo

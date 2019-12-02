@@ -16,7 +16,7 @@ const Mutation = {
       });
 
 
-
+      // This creates notarealdb entry
          return db.pizzas.create({
             name:args.name,
             description:args.description,

@@ -249,3 +249,13 @@ graphql: I am connecting from same server file
 Implementation:
 
 currently orders, pizzas, and users are microervices and included in server.js currently they share the same DB. It can be separated
+
+
+
+
+
+
+Client is on 4200
+UserAPI      4201
+OrderAPI     4202
+PizzaAPI     4203
