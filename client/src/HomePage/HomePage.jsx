@@ -32,7 +32,7 @@ class HomePage extends React.Component {
         this.props.getUsers();
 
         let t = this;
-        fetch(`${config.apiUrl}/pizzas/getAllPizzas`, {
+        fetch(`${config.pizzaApiUrl}/pizzas/getAllPizzas`, {
             method: 'GET',
             headers: authHeader()
           })
@@ -44,7 +44,7 @@ class HomePage extends React.Component {
             });
 
 
-        fetch(`${config.apiUrl}/orders/getOrders`, {
+        fetch(`${config.orderApiUrl}/orders/getOrders`, {
             method: 'GET',
             headers: authHeader()
             })
@@ -84,7 +84,7 @@ class HomePage extends React.Component {
     placeOrder() {
         debugger;
 
-        fetch(`${config.apiUrl}/orders/placeOrder`, {
+        fetch(`${config.orderApiUrl}/orders/placeOrder`, {
             method: 'POST',
             headers: authHeader(),
             body: JSON.stringify(this.state.orderObj)
@@ -102,7 +102,7 @@ class HomePage extends React.Component {
 
     delivered(e) {
         var val = e.target.getAttribute("data-value");
-        fetch(`${config.apiUrl}/orders/removeOrder`, {
+        fetch(`${config.orderApiUrl}/orders/removeOrder`, {
             method: 'POST',
             headers: authHeader(),
             body: JSON.stringify({orderId: val})

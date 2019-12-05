@@ -26,7 +26,9 @@ module.exports = {
     externals: {
         // global app config object
         config: JSON.stringify({
-            apiUrl: 'http://localhost:4200'
+            userApiUrl: 'http://localhost:4201',
+            pizzaApiUrl: 'http://localhost:4203',
+            orderApiUrl: 'http://localhost:4202'
         })
     }
 }
